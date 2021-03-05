@@ -37,4 +37,10 @@ public class Task {
     @Transient
     private int daysLeft;
 
+    public Task(String name, String description, String username, LocalDate endDate) {
+        this.name = name;
+        this.description = description;
+        this.username = username;
+        this.endDate = endDate;
+    }
 }
