@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @Component
 public class SpringTestDataConfig {
 
-
     @EventListener
     public void onApplicationStart(ContextRefreshedEvent event) {
         Task task = new Task("Aprender Spring", "Para a zup", "hugovallada", LocalDate.parse("2020-04-05"));
