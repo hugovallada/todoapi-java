@@ -1,13 +1,11 @@
 package com.github.hugovallada.todoapi.domain.tasks.dto;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
 public class TaskDTO {
 
     private Long id;

@@ -55,8 +55,9 @@ public class TaskRepositoryTest {
 
     @Test
     public void testFindById() {
+        //TODO: Test is passing individually
         Optional<Task> taskObj = repository.findById(1L);
-
+        
         assertTrue(taskObj.isPresent());
         assertEquals(taskObj.get().getName(), "Aprender Java");
     }
