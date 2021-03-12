@@ -1,5 +1,7 @@
 package com.github.hugovallada.todoapi.domain.tasks.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -31,9 +33,11 @@ public class TaskResponseDTO implements Serializable {
     private String name;
 
     @ApiModelProperty(value = "Turn in Date", example = "2021-12-31")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate endDate;
 
     @ApiModelProperty(value = "Init Date", example = "2021-04-05")
+    @JsonIgnore
     private LocalDate initDate;
 
     @ApiModelProperty(value = "Days left", example = "31")

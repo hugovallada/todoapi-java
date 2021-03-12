@@ -55,9 +55,11 @@ public class TaskRepositoryTest {
 
     @Test
     public void testFindById() {
-        //TODO: Test is passing individually
-        Optional<Task> taskObj = repository.findById(1L);
-        
+
+        Task task = new Task("Aprender Java", "Estudar java para o emprego", "hugovallada", LocalDate.parse("2021-05-04"));
+        Task savedTask = repository.save(task);
+        Optional<Task> taskObj = repository.findById(savedTask.getId());
+
         assertTrue(taskObj.isPresent());
         assertEquals(taskObj.get().getName(), "Aprender Java");
     }
@@ -66,6 +68,14 @@ public class TaskRepositoryTest {
     public void testFindByIdWithNonExistentId() {
         Optional<Task> taskObj = repository.findById(3L);
         assertFalse(taskObj.isPresent());
+    }
+
+    @Test
+    public void testUpdateStatusById() {
+        repository.updateStatusById(1L);
+        Optional<Task> taskObj = repository.findById(1L);
+        assertTrue(taskObj.isPresent());
+        assertTrue(taskObj.get().isStatus());
     }
 
 }

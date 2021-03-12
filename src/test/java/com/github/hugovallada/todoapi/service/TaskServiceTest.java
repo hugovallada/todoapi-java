@@ -18,9 +18,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class TaskServiceTest {
@@ -41,13 +41,12 @@ public class TaskServiceTest {
     TaskRequestMapper requestMapper;
 
 
-    //TODO: Tests are failing
-
     @Test
     public void testSave() {
-        BDDMockito.given(repository.save(Mockito.any(Task.class))).willReturn(requestMapper.toModel(getTaskRequest()));
+        BDDMockito.given(repository.save(Mockito.any(Task.class))).willReturn(responseMapper.toModel(getTask()));
 
         TaskResponseDTO task = service.save(getTaskRequest());
+        System.out.println(task.getName());
         assertNotNull(task);
 
         assertEquals(task.getName(), "Aprender Java");
@@ -69,6 +68,25 @@ public class TaskServiceTest {
 
     }
 
+    @Test
+    public void testFindById() {
+        BDDMockito.given(repository.findById(1L)).willReturn(Optional.of(responseMapper.toModel(getTask())));
+        TaskResponseDTO dto = getTask();
+
+        assertNotNull(dto);
+        assertEquals(dto.getId(), 1L);
+    }
+
+    @Test
+    public void testUpdateById() {
+        BDDMockito.given(repository.findById(1L)).willReturn(Optional.of(responseMapper.toModel(getTaskTrue())));
+        TaskResponseDTO dto = getTaskTrue();
+
+        assertNotNull(dto);
+        assertTrue(dto.isStatus());
+
+    }
+
 
     private TaskResponseDTO getTask() {
         TaskResponseDTO t = new TaskResponseDTO();
@@ -79,6 +97,19 @@ public class TaskServiceTest {
         t.setUsername("hugovallada");
         t.setDaysLeft(30);
         t.setStatus(false);
+
+        return t;
+    }
+
+    private TaskResponseDTO getTaskTrue() {
+        TaskResponseDTO t = new TaskResponseDTO();
+        t.setId(1L);
+        t.setDescription("Java");
+        t.setName("Aprender Java");
+        t.setEndDate(LocalDate.parse("2021-04-05"));
+        t.setUsername("hugovallada");
+        t.setDaysLeft(30);
+        t.setStatus(true);
 
         return t;
     }

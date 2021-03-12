@@ -35,7 +35,7 @@ public class TaskControllerTest {
     public void testCreate() throws Exception {
         BDDMockito.given(service.save(Mockito.any(TaskRequestDTO.class))).willReturn(getMockTask());
         mvc.perform(MockMvcRequestBuilders.post("/task")
-                .content(getJsonPayload(1L, "Java", "Aprender Java", LocalDate.parse("2021-04-05"), "hugovallada"))
+                .content(getJsonPayload(1L, "Java", "Aprender Java", "hugovallada"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -49,17 +49,18 @@ public class TaskControllerTest {
         task.setDescription("Aprender Java");
         task.setEndDate(LocalDate.parse("2021-04-05"));
         task.setUsername("hugovallada");
-//        task.setDaysLeft(30);
+        task.setDaysLeft(30);
+        task.setInitDate(LocalDate.parse("2021-03-03"));
 
         return task;
     }
 
-    private String getJsonPayload(Long id, String name, String description, LocalDate endDate, String username) throws JsonProcessingException {
+    private String getJsonPayload(Long id, String name, String description, String username) throws JsonProcessingException {
         TaskDTO dto = new TaskDTO();
         dto.setId(id);
         dto.setName(name);
         dto.setDescription(description);
-//        dto.setEndDate(endDate);
+        //dto.setEndDate(LocalDate.parse("2021-04-05"));
         dto.setUsername(username);
 
 

@@ -38,4 +38,18 @@ public class TaskController {
         return ResponseEntity.ok().body(listResp);
     }
 
+    @ApiOperation(value = "Find task by id", nickname = "taskById")
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> findById(@PathVariable Long id) {
+        TaskResponseDTO response = service.findById(id);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @ApiOperation(value = "Update Status of a task by id", nickname = "updateStatusById")
+    @PatchMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> updateStatus(@PathVariable Long id) {
+        TaskResponseDTO responseDTO = service.updateStatus(id);
+        return ResponseEntity.ok().body(responseDTO);
+    }
+
 }

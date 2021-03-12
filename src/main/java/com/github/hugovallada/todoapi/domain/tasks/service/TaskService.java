@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,4 +46,27 @@ public class TaskService {
 
         return dtos;
     }
+
+    public TaskResponseDTO findById(Long id) {
+        Optional<Task> taskOptional = repository.findById(id);
+
+        if (taskOptional.isEmpty()) {
+            throw new RuntimeException("Is empty");
+        }
+
+        return responseMapper.toDto(taskOptional.get());
+    }
+    
+    public TaskResponseDTO updateStatus(Long id) {
+        repository.updateStatusById(id);
+        Optional<Task> taskOptional = repository.findById(id);
+
+        if (taskOptional.isEmpty()) {
+            throw new RuntimeException("Is empty");
+        }
+
+        return responseMapper.toDto(taskOptional.get());
+    }
+
+
 }
