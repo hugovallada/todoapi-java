@@ -1,6 +1,5 @@
 package com.github.hugovallada.todoapi.domain.tasks.service;
 
-import com.github.hugovallada.todoapi.domain.tasks.dto.TaskDTO;
 import com.github.hugovallada.todoapi.domain.tasks.dto.TaskRequestDTO;
 import com.github.hugovallada.todoapi.domain.tasks.dto.TaskResponseDTO;
 import com.github.hugovallada.todoapi.domain.tasks.entity.Task;
@@ -39,10 +38,10 @@ public class TaskService {
         return responseMapper.toDto(task);
     }
 
-    public List<TaskDTO> findAll() {
+    public List<TaskResponseDTO> findAll() {
         List<Task> tasks = repository.findAll();
 
-        List<TaskDTO> dtos = tasks.stream().map(task -> mapper.toDTO(task)).collect(Collectors.toList());
+        List<TaskResponseDTO> dtos = tasks.stream().map(task -> responseMapper.toDto(task)).collect(Collectors.toList());
 
         return dtos;
     }

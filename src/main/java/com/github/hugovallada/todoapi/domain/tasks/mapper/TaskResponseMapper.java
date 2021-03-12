@@ -13,6 +13,7 @@ public interface TaskResponseMapper {
     Task toModel(TaskResponseDTO dto);
 
     @Mapping(source = "endDate", target = "endDate")
+    @Mapping(source = "initDate", target = "initDate")
     TaskResponseDTO toDto(Task task);
 
 

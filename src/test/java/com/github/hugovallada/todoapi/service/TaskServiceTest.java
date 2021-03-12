@@ -1,6 +1,5 @@
 package com.github.hugovallada.todoapi.service;
 
-import com.github.hugovallada.todoapi.domain.tasks.dto.TaskDTO;
 import com.github.hugovallada.todoapi.domain.tasks.dto.TaskRequestDTO;
 import com.github.hugovallada.todoapi.domain.tasks.dto.TaskResponseDTO;
 import com.github.hugovallada.todoapi.domain.tasks.entity.Task;
@@ -42,7 +41,7 @@ public class TaskServiceTest {
     TaskRequestMapper requestMapper;
 
 
-    //TODO: Tests are failling
+    //TODO: Tests are failing
 
     @Test
     public void testSave() {
@@ -63,7 +62,7 @@ public class TaskServiceTest {
 
         BDDMockito.given(repository.findAll()).willReturn(tasks);
 
-        List<TaskDTO> dtos = service.findAll();
+        List<TaskResponseDTO> dtos = service.findAll();
 
         assertNotNull(dtos);
         assertEquals(dtos.get(0).getName(), "Aprender Java");
@@ -78,7 +77,7 @@ public class TaskServiceTest {
         t.setName("Aprender Java");
         t.setEndDate(LocalDate.parse("2021-04-05"));
         t.setUsername("hugovallada");
-//        t.setDaysLeft(30);
+        t.setDaysLeft(30);
         t.setStatus(false);
 
         return t;

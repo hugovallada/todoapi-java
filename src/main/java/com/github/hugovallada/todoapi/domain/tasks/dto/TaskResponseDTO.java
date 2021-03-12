@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @ApiModel(value = "Task Response")
 @Getter
@@ -32,10 +33,17 @@ public class TaskResponseDTO implements Serializable {
     @ApiModelProperty(value = "Turn in Date", example = "2021-12-31")
     private LocalDate endDate;
 
-//    @ApiModelProperty(value = "Days left", example = "31")
-//    private Integer daysLeft;
+    @ApiModelProperty(value = "Init Date", example = "2021-04-05")
+    private LocalDate initDate;
+
+    @ApiModelProperty(value = "Days left", example = "31")
+    private Integer daysLeft;
 
     @ApiModelProperty(value = "Status", example = "true")
     private boolean status;
 
+    public Integer getDaysLeft() {
+        Long days = ChronoUnit.DAYS.between(initDate, endDate);
+        return days.intValue();
+    }
 }
