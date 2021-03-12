@@ -1,8 +1,12 @@
 package com.github.hugovallada.todoapi.service;
 
 import com.github.hugovallada.todoapi.domain.tasks.dto.TaskDTO;
+import com.github.hugovallada.todoapi.domain.tasks.dto.TaskRequestDTO;
+import com.github.hugovallada.todoapi.domain.tasks.dto.TaskResponseDTO;
 import com.github.hugovallada.todoapi.domain.tasks.entity.Task;
 import com.github.hugovallada.todoapi.domain.tasks.mapper.TaskMapper;
+import com.github.hugovallada.todoapi.domain.tasks.mapper.TaskRequestMapper;
+import com.github.hugovallada.todoapi.domain.tasks.mapper.TaskResponseMapper;
 import com.github.hugovallada.todoapi.domain.tasks.repository.TaskRepository;
 import com.github.hugovallada.todoapi.domain.tasks.service.TaskService;
 import org.junit.jupiter.api.Test;
@@ -31,12 +35,20 @@ public class TaskServiceTest {
     @Autowired
     TaskMapper mapper;
 
+    @Autowired
+    TaskResponseMapper responseMapper;
+
+    @Autowired
+    TaskRequestMapper requestMapper;
+
+
+    //TODO: Tests are failling
 
     @Test
     public void testSave() {
-        BDDMockito.given(repository.save(Mockito.any(Task.class))).willReturn(mapper.toModel(getTask()));
+        BDDMockito.given(repository.save(Mockito.any(Task.class))).willReturn(requestMapper.toModel(getTaskRequest()));
 
-        TaskDTO task = service.save(getTask());
+        TaskResponseDTO task = service.save(getTaskRequest());
         assertNotNull(task);
 
         assertEquals(task.getName(), "Aprender Java");
@@ -47,7 +59,7 @@ public class TaskServiceTest {
     public void testFindAll() {
 
         List<Task> tasks = new ArrayList<>();
-        tasks.add(mapper.toModel(getTask()));
+        tasks.add(responseMapper.toModel(getTask()));
 
         BDDMockito.given(repository.findAll()).willReturn(tasks);
 
@@ -59,14 +71,25 @@ public class TaskServiceTest {
     }
 
 
-    private TaskDTO getTask() {
-        TaskDTO t = new TaskDTO();
+    private TaskResponseDTO getTask() {
+        TaskResponseDTO t = new TaskResponseDTO();
         t.setId(1L);
         t.setDescription("Java");
         t.setName("Aprender Java");
         t.setEndDate(LocalDate.parse("2021-04-05"));
         t.setUsername("hugovallada");
-        t.setDaysLeft(30);
+//        t.setDaysLeft(30);
+        t.setStatus(false);
+
+        return t;
+    }
+
+    private TaskRequestDTO getTaskRequest() {
+        TaskRequestDTO t = new TaskRequestDTO();
+        t.setDescription("Java");
+        t.setName("Aprender Java");
+        t.setEndDate(LocalDate.parse("2021-04-05"));
+        t.setUsername("hugovallada");
         t.setStatus(false);
 
         return t;

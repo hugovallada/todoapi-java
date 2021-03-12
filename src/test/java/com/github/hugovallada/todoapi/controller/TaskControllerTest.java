@@ -3,6 +3,8 @@ package com.github.hugovallada.todoapi.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.hugovallada.todoapi.domain.tasks.dto.TaskDTO;
+import com.github.hugovallada.todoapi.domain.tasks.dto.TaskRequestDTO;
+import com.github.hugovallada.todoapi.domain.tasks.dto.TaskResponseDTO;
 import com.github.hugovallada.todoapi.domain.tasks.service.TaskService;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -31,7 +33,7 @@ public class TaskControllerTest {
 
     @Test
     public void testCreate() throws Exception {
-        BDDMockito.given(service.save(Mockito.any(TaskDTO.class))).willReturn(getMockTask());
+        BDDMockito.given(service.save(Mockito.any(TaskRequestDTO.class))).willReturn(getMockTask());
         mvc.perform(MockMvcRequestBuilders.post("/task")
                 .content(getJsonPayload(1L, "Java", "Aprender Java", LocalDate.parse("2021-04-05"), "hugovallada"))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -40,13 +42,14 @@ public class TaskControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("name").value("Java"));
     }
 
-    private TaskDTO getMockTask() {
-        TaskDTO task = new TaskDTO();
+    private TaskResponseDTO getMockTask() {
+        TaskResponseDTO task = new TaskResponseDTO();
         task.setId(1L);
         task.setName("Java");
         task.setDescription("Aprender Java");
         task.setEndDate(LocalDate.parse("2021-04-05"));
         task.setUsername("hugovallada");
+//        task.setDaysLeft(30);
 
         return task;
     }
@@ -58,7 +61,7 @@ public class TaskControllerTest {
         dto.setDescription(description);
 //        dto.setEndDate(endDate);
         dto.setUsername(username);
-        
+
 
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(dto);
