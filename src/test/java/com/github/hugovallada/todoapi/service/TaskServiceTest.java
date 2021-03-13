@@ -120,7 +120,7 @@ public class TaskServiceTest {
         t.setName("Aprender Java");
         t.setEndDate(LocalDate.parse("2021-04-05"));
         t.setUsername("hugovallada");
-        t.setStatus(false);
+        //t.setStatus(false);
 
         return t;
     }
