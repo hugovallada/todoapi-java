@@ -23,18 +23,25 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(
+            unique = true,
+            nullable = false
+    )
     private String name;
 
+    @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
     private String username;
 
     @Setter(AccessLevel.NONE)
     @CreatedDate
     private LocalDate initDate;
 
+    @Column(nullable = false)
     private LocalDate endDate;
-
+    
     private boolean status = false;
 
     public Task(String name, String description, String username, LocalDate endDate) {

@@ -1,4 +1,4 @@
-package com.github.hugovallada.todoapi.domain.tasks.controller.util;
+package com.github.hugovallada.todoapi.infra.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,11 +1,16 @@
-package com.github.hugovallada.todoapi.infra.config.exceptions;
+package com.github.hugovallada.todoapi.infra.exceptions;
 
+import com.github.hugovallada.todoapi.domain.tasks.exceptions.TaskAlreadyExistsException;
+import com.github.hugovallada.todoapi.domain.tasks.exceptions.TaskNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -16,6 +21,26 @@ import java.util.List;
 
 @ControllerAdvice
 public class TodoExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(TaskAlreadyExistsException.class)
+    public ResponseEntity<Object> handleTaskAlreadyExists(TaskAlreadyExistsException exception) {
+        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "There's already a task with this name", Collections.singletonList(exception.getMessage()));
+    }
+
+    @ExceptionHandler(TaskNotFoundException.class)
+    public ResponseEntity<Object> handleTaskNotFound(TaskNotFoundException exception) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, "Cound't find the object with the given id", Collections.singletonList(exception.getMessage()));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException exception) {
+        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "The operation will violate database rules", Collections.singletonList(exception.getMessage()));
+    }
+
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    public ResponseEntity<Object> handleEmptyResultData(EmptyResultDataAccessException exception) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, "Couldn't find the object with the given id", Collections.singletonList(exception.getMessage()));
+    }
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {

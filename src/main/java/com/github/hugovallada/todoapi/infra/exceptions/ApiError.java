@@ -1,4 +1,4 @@
-package com.github.hugovallada.todoapi.infra.config.exceptions;
+package com.github.hugovallada.todoapi.infra.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

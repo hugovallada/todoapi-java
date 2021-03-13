@@ -53,4 +53,21 @@ public class TaskController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
+    @ApiOperation(value = "Delete task by id", nickname = "deleteTaskById")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        service.deleteTask(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ApiOperation(value = "Update task by id", nickname = "updateTask")
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> updateTask(
+            @PathVariable Long id,
+            @RequestBody @Valid TaskRequestDTO requestDTO
+    ) {
+        TaskResponseDTO response = service.updateTask(id, requestDTO);
+        return ResponseEntity.ok().body(response);
+    }
+
 }

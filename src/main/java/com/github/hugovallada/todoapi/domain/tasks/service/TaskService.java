@@ -3,10 +3,13 @@ package com.github.hugovallada.todoapi.domain.tasks.service;
 import com.github.hugovallada.todoapi.domain.tasks.dto.TaskRequestDTO;
 import com.github.hugovallada.todoapi.domain.tasks.dto.TaskResponseDTO;
 import com.github.hugovallada.todoapi.domain.tasks.entity.Task;
+import com.github.hugovallada.todoapi.domain.tasks.exceptions.TaskAlreadyExistsException;
+import com.github.hugovallada.todoapi.domain.tasks.exceptions.TaskNotFoundException;
 import com.github.hugovallada.todoapi.domain.tasks.mapper.TaskMapper;
 import com.github.hugovallada.todoapi.domain.tasks.mapper.TaskRequestMapper;
 import com.github.hugovallada.todoapi.domain.tasks.mapper.TaskResponseMapper;
 import com.github.hugovallada.todoapi.domain.tasks.repository.TaskRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +38,7 @@ public class TaskService {
     }
 
     public TaskResponseDTO save(TaskRequestDTO taskDTO) {
+        checkIfDuplicateTask(taskDTO.getName());
         Task task = repository.save(requestMapper.toModel(taskDTO));
         return responseMapper.toDto(task);
     }
@@ -48,25 +52,58 @@ public class TaskService {
     }
 
     public TaskResponseDTO findById(Long id) {
-        Optional<Task> taskOptional = repository.findById(id);
+        Task task = checkIfTaskExists(id);
 
-        if (taskOptional.isEmpty()) {
-            throw new RuntimeException("Is empty");
-        }
-
-        return responseMapper.toDto(taskOptional.get());
+        return responseMapper.toDto(task);
     }
-    
+
     public TaskResponseDTO updateStatus(Long id) {
         repository.updateStatusById(id);
+
+        Task task = checkIfTaskExists(id);
+
+        return responseMapper.toDto(task);
+    }
+
+    public void deleteTask(Long id) {
+        repository.deleteById(id);
+    }
+
+    public TaskResponseDTO updateTask(Long id, TaskRequestDTO taskRequestDTO) {
+
+        Optional<Task> task = repository.findByName(taskRequestDTO.getName());
+
+        if (task.isEmpty()) {
+            throw new TaskNotFoundException(String.format("Task with code %s not found", id));
+        }
+
+        if (task.isPresent() && task.get().getId() != id) {
+            throw new TaskAlreadyExistsException("There's already a task with this name");
+        }
+
+        Task toUpdateTask = task.get();
+
+        BeanUtils.copyProperties(requestMapper.toModel(taskRequestDTO), toUpdateTask, "id");
+        Task updatedTask = repository.save(toUpdateTask);
+
+        return responseMapper.toDto(updatedTask);
+    }
+
+    private Task checkIfTaskExists(Long id) {
         Optional<Task> taskOptional = repository.findById(id);
 
         if (taskOptional.isEmpty()) {
-            throw new RuntimeException("Is empty");
+            throw new TaskNotFoundException(String.format("Task with id %s not found", id));
         }
 
-        return responseMapper.toDto(taskOptional.get());
+        return taskOptional.get();
     }
 
+    private void checkIfDuplicateTask(String name) {
+        Optional<Task> taskOptional = repository.findByName(name);
 
+        if (taskOptional.isPresent()) {
+            throw new TaskAlreadyExistsException(String.format("The task with name '%s' already exists", name.toUpperCase()));
+        }
+    }
 }

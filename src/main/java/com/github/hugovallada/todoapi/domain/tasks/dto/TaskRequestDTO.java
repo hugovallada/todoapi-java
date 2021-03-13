@@ -37,7 +37,7 @@ public class TaskRequestDTO implements Serializable {
 
     @ApiModelProperty(name = "Turn in date", example = "2021-12-31")
     @NotNull(message = "Date can't be null")
-    @Future(message = "The date is not valid")
+    @Future(message = "The date must be in the future")
     private LocalDate endDate;
 
 

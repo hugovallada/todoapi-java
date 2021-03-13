@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
@@ -13,5 +14,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Modifying
     @Query("Update Task t SET t.status = true WHERE t.id = ?1")
     void updateStatusById(Long id);
+
+    Optional<Task> findByName(String name);
 
 }
